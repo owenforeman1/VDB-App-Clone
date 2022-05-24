@@ -1,4 +1,4 @@
-const User = require('./User');
+const User = require('./Users');
 const Game = require('./Game');
 const GameList = require('./GameList')
 
