@@ -13,13 +13,10 @@ const userSchema = new Schema({
         required: true,
         minlength: 6,
     },
-    games:[
-        {
-          //[gameListSchema]
-            type: Schema.Types.ObjectID,
-            ref: 'Game',
-        },
-    ],
+    lists: [{
+    type: Schema.Types.ObjectId,
+    ref: "GameList",
+  }],
 });
 
 userSchema.pre('save', async function (next) {

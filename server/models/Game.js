@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const gameSchema = new Schema({
   slug: {
@@ -15,9 +15,9 @@ const gameSchema = new Schema({
   },
   image: {
     type: String,
-  }
+  },
 });
 
-const Game = model('Game', gameSchema);
+const Game = model("Game", gameSchema);
 
 module.exports = Game;
