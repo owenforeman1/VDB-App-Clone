@@ -14,11 +14,12 @@ const typeDefs = gql`
         name: String
         releades: String
         image: String
-        games: [Game]
     }
 
     type GameList {
         _id: ID
+        createdAt: String
+        listName: String
         user: User!
         games: [Game]
     }
@@ -32,10 +33,14 @@ const typeDefs = gql`
         users: [User]
         user(username: String!): User
         games: [Game]
+        game(name: String!): Game
+        gameLists(username: String): [GameList]
+        gameList(listId: ID!): GameList
     }
 
     type Mutation {
-        
+        addUser(username: String!, password: String!): Auth
+        login(username: String!, password: String!): Auth
     }
 `;
 
