@@ -5,15 +5,38 @@ const typeDefs = gql`
         _id: ID
         username: String
         password: String
+        gameLists: GameList
     }
 
-    type Game {}
+    type Game {
+        _id: ID
+        slug: String
+        name: String
+        releades: String
+        image: String
+        games: [Game]
+    }
 
-    type GameList {}
+    type GameList {
+        _id: ID
+        user: User!
+        games: [Game]
+    }
 
-    type Query {}
+    type Auth {
+        token: ID!
+        user: User
+    }
 
-    type Mutation {}
+    type Query {
+        users: [User]
+        user(username: String!): User
+        games: [Game]
+    }
+
+    type Mutation {
+        
+    }
 `;
 
 module.exports = typeDefs;
