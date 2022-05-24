@@ -16,6 +16,13 @@ const resolvers = {
       game: async (parent, { game }) => {
         return await Game.find({ game });
       },
+      gameLists: async (parent, { username }) => {
+        const params = username ? { username } : {};
+        return GameList.find(params).sort({ createdAt: -1 })
+      },
+      gameList: async (parent, { listId }) => {
+        return Thought.findOne({ _id: listId })
+      },
   },
 
   Mutation: {
@@ -40,7 +47,11 @@ const resolvers = {
         const token = signToken(user);
   
         return { token, user };
-      },  
+      },
+    addGame: async () => {},
+    addGameList: async () => {},  
+    removeGame: async () => {},
+    removeGameList: async () => {},
   }
 };
 
