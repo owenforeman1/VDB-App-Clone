@@ -15,6 +15,7 @@ const userSchema = new Schema({
     },
     games:[
         {
+          //[gameListSchema]
             type: Schema.Types.ObjectID,
             ref: 'Game',
         },
