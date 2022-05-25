@@ -18,10 +18,10 @@ const resolvers = {
       },
       gameLists: async (parent, { username }) => {
         const params = username ? { username } : {};
-        return GameList.find(params).sort({ createdAt: -1 })
+        return GameList.find(params).sort({ createdAt: -1 }).populate('games')
       },
       gameList: async (parent, { listId }) => {
-        return Thought.findOne({ _id: listId })
+        return Thought.findOne({ _id: listId }).populate('games')
       },
   },
 
@@ -49,9 +49,26 @@ const resolvers = {
         return { token, user };
       },
     addGame: async () => {},
-    addGameList: async () => {},  
-    removeGame: async () => {},
-    removeGameList: async () => {},
+    addGameList: async (parent, { listName, listAuthor }) => {
+      const list = await GameList.create({ listName, listAuthor })
+
+      await User.findOneAndUpdate(
+        { username: listAuthor },
+        { $addToSet: { lists: list._id } }
+      );
+
+      return list;
+    },  
+    removeGame: async (parent, { listId, gameId }) => {
+      return GameList.findOneAndUpdate(
+        { _id: listId },
+        { $pull: { games: { _id: gameId } } },
+        { new: true }
+      );
+    },
+    removeGameList: async (parent, { listId }) => {
+      return GameList.findOneAndDelete({ _id: listId });
+    },
   }
 };
 
