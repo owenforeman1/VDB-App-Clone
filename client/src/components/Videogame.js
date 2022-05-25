@@ -1,7 +1,9 @@
 import React from 'react';
 
 const Videogame = ({ name, background_image, esrb_rating, metacritic, parent_platforms, genres, released }) => (
+<>
 <div className='videogame'>
+
     <img src={background_image} alt={name} />
     <div className='videogame-info'>
         <h3>{name}</h3>
@@ -16,5 +18,9 @@ const Videogame = ({ name, background_image, esrb_rating, metacritic, parent_pla
     </div>
 
 </div>
+</>
+
 )
+
+
 export default Videogame;
