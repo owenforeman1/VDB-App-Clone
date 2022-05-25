@@ -1,6 +1,7 @@
 // Axios is a popular NPM package used for preforming API requests
+import "dotenv/config";
 import axios from "axios";
-const APIKEY = "a784963fa24f4f1e9cd7ca071a414ca4";
+const APIKEY = process.env.APIKEY;
 
 // Using axios, we create a search method that is specific to our use case and export it at the bottom
 const search = (query) =>
