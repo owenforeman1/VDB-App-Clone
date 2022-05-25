@@ -12,7 +12,7 @@ const typeDefs = gql`
         _id: ID
         slug: String
         name: String
-        releades: String
+        released: String
         image: String
     }
 
