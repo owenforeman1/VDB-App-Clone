@@ -5,7 +5,7 @@ const typeDefs = gql`
         _id: ID
         username: String
         password: String
-        gameLists: GameList
+        gameLists: [GameList]
     }
 
     type Game {
@@ -20,7 +20,6 @@ const typeDefs = gql`
         _id: ID
         createdAt: String
         listName: String
-        user: User!
         games: [Game]
     }
 

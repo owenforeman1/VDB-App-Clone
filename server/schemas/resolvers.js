@@ -48,22 +48,29 @@ const resolvers = {
   
       return { token, user };
     },
-    addGame: async (parent, { listId, gameId }) => {
+    addGame: async (parent, { listId, slug, name, released, image }) => {
+      const newGame = await Game.create({ slug, name, released, image})
+
       return GameList.findOneAndUpdate(
         { _id: listId },
-        { $addToSet: { games: { _id: gameId } } },
+        { $addToSet: { games: { _id: newGame._id } } },
         { new: true }
+        // Future Todo: Add if/else to search for games if they already exist
       );
     },
-    addGameList: async (parent, { listName, listAuthor }) => {
-      const list = await GameList.create({ listName, listAuthor })
+    addGameList: async (parent, { listName }, context) => {
+      
+      if (context.user) {
+        const list = await GameList.create({ listName })
+        await User.findOneAndUpdate(
+          {_id: context.user._id}
+          { $addToSet: { lists: list._id } }
+        );
 
-      await User.findOneAndUpdate(
-        { username: listAuthor },
-        { $addToSet: { lists: list._id } }
-      );
+        return list;
+      };
 
-      return list;
+      throw new AuthenticationError('You need to be logged in!');
     },  
     removeGame: async (parent, { listId, gameId }) => {
       return GameList.findOneAndUpdate(
