@@ -5,16 +5,23 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
       users: async () => {
-          return await User.find({}).populate('games');
+          return await User.find({}).populate('gameLists');
       },
       user: async (parent, { username }) => {
-        return await User.findOne({ username }).populate('games');
+        return await User.findOne({ username }).populate('gameLists');
       },
       games: async () => {
         return await Game.find({});
       },
       game: async (parent, { game }) => {
         return await Game.find({ game });
+      },
+      gameLists: async (parent, { username }) => {
+        const params = username ? { username } : {};
+        return GameList.find(params).sort({ createdAt: -1 })
+      },
+      gameList: async (parent, { listId }) => {
+        return Thought.findOne({ _id: listId })
       },
   },
 
@@ -40,7 +47,11 @@ const resolvers = {
         const token = signToken(user);
   
         return { token, user };
-      },  
+      },
+    addGame: async () => {},
+    addGameList: async () => {},  
+    removeGame: async () => {},
+    removeGameList: async () => {},
   }
 };
 
