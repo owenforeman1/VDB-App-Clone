@@ -21,33 +21,33 @@ const resolvers = {
         return GameList.find(params).sort({ createdAt: -1 }).populate('games')
       },
       gameList: async (parent, { listId }) => {
-        return Thought.findOne({ _id: listId }).populate('games')
+        return GameList.findOne({ _id: listId }).populate('games')
       },
   },
 
   Mutation: {
     addUser: async (parent, { username, password }) => {
-        const user = await User.create({ username, password });
-        const token = signToken(user);
-        return { token, user };
-      },
+      const user = await User.create({ username, password });
+      const token = signToken(user);
+      return { token, user };
+    },
     login: async (parent, { username, password }) => {
-        const user = await User.findOne({ username });
+      const user = await User.findOne({ username });
   
-        if (!user) {
-          throw new AuthenticationError('No user found with this username');
-        }
+      if (!user) {
+        throw new AuthenticationError('No user found with this username');
+      }
   
-        const correctPw = await user.isCorrectPassword(password);
+      const correctPw = await user.isCorrectPassword(password);
   
-        if (!correctPw) {
-          throw new AuthenticationError('Incorrect credentials');
-        }
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect credentials');
+      }
   
-        const token = signToken(user);
+      const token = signToken(user);
   
-        return { token, user };
-      },
+      return { token, user };
+    },
     addGame: async (parent, { listId, gameId }) => {
       return GameList.findOneAndUpdate(
         { _id: listId },
