@@ -48,7 +48,13 @@ const resolvers = {
   
         return { token, user };
       },
-    addGame: async () => {},
+    addGame: async (parent, { listId, gameId }) => {
+      return GameList.findOneAndUpdate(
+        { _id: listId },
+        { $addToSet: { games: { _id: gameId } } },
+        { new: true }
+      );
+    },
     addGameList: async (parent, { listName, listAuthor }) => {
       const list = await GameList.create({ listName, listAuthor })
 
