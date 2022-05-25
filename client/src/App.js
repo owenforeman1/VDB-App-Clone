@@ -1,6 +1,34 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import Videogame from './components/Videogame';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  
+  const token = localStorage.getItem('id_token');
+  
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
 
 const token = '3925d094b56b4718b74df426151cf755';
 const test = `https://rawg.io/api/games?&key=${token}&page=1&page_size=20`;
@@ -41,6 +69,7 @@ function App() {
   }
 
   return (
+  <ApolloProvider client={client}>
     <>
       <header>
         <form onSubmit={handleOnSubmit} >
@@ -51,6 +80,7 @@ function App() {
         {videogames.map(videogame => (<Videogame key={videogame.id} {...videogame} />))}
       </div>
     </>
+    </ApolloProvider>
   )
 
 };
