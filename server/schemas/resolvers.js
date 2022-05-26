@@ -7,18 +7,18 @@ const resolvers = {
       users: async () => {
           return await User.find({}).populate('gameLists');
       },
-      user: async (parent, { username }) => {
-        return await User.findOne({ username }).populate('gameLists');
+      user: async (parent, { userId }) => {
+        return await User.findOne({ userId }).populate('gameLists');
       },
       games: async () => {
         return await Game.find({});
       },
-      game: async (parent, { game }) => {
-        return await Game.findOne({ game });
+      game: async (parent, { gameId }) => {
+        return await Game.findOne({ gameId });
       },
-      gameLists: async (parent, { username }) => {
-        const params = username ? { username } : {};
-        return GameList.find(params).sort({ createdAt: -1 }).populate('games')
+      gameLists: async (parent, { userId }) => {
+        const params = userId ? { userId } : {};
+        return GameList.find(params).sort({ createdAt: -1 }).populate('games') 
       },
       gameList: async (parent, { listId }) => {
         return GameList.findOne({ _id: listId }).populate('games')
@@ -48,8 +48,8 @@ const resolvers = {
   
       return { token, user };
     },
-    addGame: async (parent, { listId, slug, name, released, image }) => {
-      const newGame = await Game.create({ slug, name, released, image})
+    addGame: async (parent, { listId, slug, name, released, image, rating, platforms, metacritic }) => {
+      const newGame = await Game.create({ slug, name, released, image, rating, platforms, metacritic})
 
       await GameList.findOneAndUpdate(
         { _id: listId },
