@@ -15,8 +15,6 @@ const Videogame = ({ name, background_image, esrb_rating, metacritic, parent_pla
         <span>{released}</span>
         <h2>Genres:</h2>
         <span>{genres.map(genre => <div>{genre.name}</div>)}</span>
-        <br/>
-        <button onclick='' >Add to List</button>
     </div>
 
 </div>

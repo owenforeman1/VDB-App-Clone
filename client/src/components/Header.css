@@ -1,4 +1,5 @@
 .headerText {
+    padding: 10px;
     background: url("https://media.giphy.com/media/4H3Ii5eLChYul9p7NL/giphy.gif");
     background-size: cover;
     background-position: center;
@@ -14,6 +15,4 @@
     -ms-user-select: none;
     user-select: none;
     text-align: center;
-    height: 100px;
-    margin: -1px;
 }
