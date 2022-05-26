@@ -16,7 +16,7 @@ const typeDefs = gql`
         image: String
         rating: String
         platforms: String
-        metacritic: Number
+        metacritic: Int
     }
 
     type GameList {
