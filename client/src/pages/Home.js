@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
 import Videogame from '../components/Videogame';
 
 const token = '3925d094b56b4718b74df426151cf755';
