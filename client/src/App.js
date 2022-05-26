@@ -5,6 +5,29 @@ import Login from './components/Login';
 import { Routes, Route, Router, NavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser, faEnvelope, faBook } from '@fortawesome/free-solid-svg-icons';
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  
+  const token = localStorage.getItem('id_token');
+  
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
 
 const token = '3925d094b56b4718b74df426151cf755';
 const test = `https://rawg.io/api/games?&key=${token}&page=1&page_size=15`;
@@ -81,6 +104,7 @@ function App() {
   
 
   return (
+  <ApolloProvider client={client}>
     <>
       <header>
         <form onSubmit={handleOnSubmit} >
@@ -98,6 +122,7 @@ function App() {
         <button className='next-button' type='submit' onClick={handleNextButtonPress} >NEXT</button>
       </div>
     </>
+    </ApolloProvider>
   )
 
 };
