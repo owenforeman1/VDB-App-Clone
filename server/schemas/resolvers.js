@@ -48,8 +48,8 @@ const resolvers = {
   
       return { token, user };
     },
-    addGame: async (parent, { listId, slug, name, released, image }) => {
-      const newGame = await Game.create({ slug, name, released, image})
+    addGame: async (parent, { listId, slug, name, released, image, rating, platforms, metacritic }) => {
+      const newGame = await Game.create({ slug, name, released, image, rating, platforms, metacritic})
 
       return GameList.findOneAndUpdate(
         { _id: listId },
