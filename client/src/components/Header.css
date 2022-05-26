@@ -1,0 +1,19 @@
+.headerText {
+    background: url("https://media.giphy.com/media/4H3Ii5eLChYul9p7NL/giphy.gif");
+    background-size: cover;
+    background-position: center;
+    -webkit-background-clip: text;
+    color: #9cb8c947;
+    text-transform: uppercase;
+    font-size: 5rem;
+    font-weight: 900;
+    font-family: 'Righteous', cursive;
+    letter-spacing: 1px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    height: 100px;
+    margin: -1px;
+}
