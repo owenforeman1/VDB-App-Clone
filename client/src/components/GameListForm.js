@@ -3,28 +3,48 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 
 import { ADD_GAMELIST } from "../utils/mutations";
+import { QUERY_GAMELISTS, QUERY_ME } from '../utils/queries';
 
-import Auth from "../../utils/auth";
+import Auth from "../utils/auth";
 
-const GameList = ({ thoughtId }) => {
-  const [commentText, setCommentText] = useState("");
+const GameList = () => {
+  const [listName, setListName] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addComment, { error }] = useMutation(ADD_GAMELIST);
+  const [addList, { error }] = useMutation(ADD_GAMELIST, {
+    update(cache, { data: { addList } }) {
+      try {
+        const { gameLists } = cache.readQuery({ query: QUERY_GAMELISTS });
+
+        cache.writeQuery({
+          query: QUERY_GAMELISTS,
+          data: { gameLists: [addList, ...gameLists] },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+
+      // update me object's cache
+      /* const { me } = cache.readQuery({ query: QUERY_ME });
+      cache.writeQuery({
+        query: QUERY_ME,
+        data: { me: { ...me, thoughts: [...me.lists, addList] } },
+      }); */
+    },
+  });
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const { data } = await addComment({
+      const { data } = await addList({
         variables: {
-          thoughtId,
-          commentText,
-          commentAuthor: Auth.getProfile().data.username,
+          listName,
+          listAuthor: Auth.getProfile().data.username,
         },
       });
 
-      setCommentText("");
+      setListName("");
     } catch (err) {
       console.error(err);
     }
@@ -33,8 +53,8 @@ const GameList = ({ thoughtId }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "commentText" && value.length <= 280) {
-      setCommentText(value);
+    if (name === "listName" && value.length <= 280) {
+      setListName(value);
       setCharacterCount(value.length);
     }
   };
@@ -58,9 +78,9 @@ const GameList = ({ thoughtId }) => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="commentText"
-                placeholder="Add your comment..."
-                value={commentText}
+                name="listName"
+                placeholder="Your list title here"
+                value={listName}
                 className="form-input w-100"
                 style={{ lineHeight: "1.5", resize: "vertical" }}
                 onChange={handleChange}
