@@ -13,7 +13,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 6,
   },
-  lists: [
+  gameLists: [
     {
       type: Schema.Types.ObjectId,
       ref: "GameList",
