@@ -1,23 +1,46 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css'
 import { Link } from 'react-router-dom';
+
+import Auth from '../utils/auth';
 
 
 
 
 function Header(){
+    const logout = (event) => {
+        event.preventDefault();
+        Auth.logout();
+    };
     return (
         <div className="header">
-            <h1 className='headerText'>IVDB</h1>
-            <Link className="text-light" to="/signup">
-            <h1 className="m-0">Signup</h1>
+            <Link className="text-light" to="/">
+                <h1 className='headerText'>IVDB</h1>
             </Link>
-            <Link className="text-light" to="/login">
-            <h1 className="m-0">Login</h1>
-            </Link>
-            <Link className="text-light" to="/profile">
-            <h1 className="m-0">Profile</h1>
-            </Link>
+            <div>
+                {Auth.loggedIn() ? (
+                    <>
+                    <Link className="button" to="/me">
+                        {Auth.getProfile().data.username}'s profile
+                    </Link>
+                        <button className="button" onClick={logout}>
+                        Logout
+                        </button>
+                    </>
+                ) : (
+                    <>
+                    <Link className="button" to="/login">
+                        <button className="button">
+                            Login
+                        </button>
+                    </Link>
+                    <Link className="button" to="/signup">
+                        <button>Signup</button>
+                    </Link>
+                    </>
+                )}   
+            </div>
         </div>
     )
 }
