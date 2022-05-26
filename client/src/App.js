@@ -1,18 +1,22 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import Videogame from './components/Videogame';
+import Login from './components/Login';
+import { Routes, Route, Router, NavLink, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faUser, faEnvelope, faBook } from '@fortawesome/free-solid-svg-icons';
 
 const token = '3925d094b56b4718b74df426151cf755';
-const currentPage = 1;
-const test = `https://rawg.io/api/games?&key=${token}&page=${currentPage}&page_size=30`;
-const searchtest = `https://rawg.io/api/games?&key=${token}&&page_size=30&search=`;
+const test = `https://rawg.io/api/games?&key=${token}&page=1&page_size=15`;
+const searchtest = `https://rawg.io/api/games?&key=${token}&page_size=15&search=`;
 
 
 function App() {
 
   const [videogames, setVideogames ] = useState([]);
   const [searchTerm, setSearchTerm ] = useState('');
-  const [nextPage, setPage] = useState([]);
+  const [nextPage, setNextPage] = useState([]);
+  const [prevPage, setPrevPage] = useState([]);
 
   useEffect( () => {
     fetch(test)
@@ -20,7 +24,8 @@ function App() {
     .then(data => {
       console.log(data);
       setVideogames(data.results);
-      setPage(data.next);
+      setNextPage(data.next);
+      setPrevPage(data.previous);
     });
 
   }, []);
@@ -33,6 +38,8 @@ function App() {
     .then(data => {
       console.log(data);
       setVideogames(data.results);
+      setNextPage(data.next);
+      setPrevPage(data.previous);
     });
 
     setSearchTerm('');
@@ -43,7 +50,7 @@ function App() {
     setSearchTerm(e.target.value);
   }
 
-  const handleButtonPress = (e) => {
+  const handleNextButtonPress = (e) => {
     e.preventDefault();
 
     fetch(nextPage)
@@ -51,14 +58,27 @@ function App() {
     .then(data => {
       console.log(data);
       setVideogames(data.results);
-      setPage(data.next);
+      setNextPage(data.next);
+      setPrevPage(data.previous);
     });
 
   }
 
-  // const handleButtonChange = () => {
-  //   setPage();
-  // }
+  const handlePrevButtonPress = (e) => {
+    e.preventDefault();
+
+    fetch(prevPage)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      setVideogames(data.results);
+      setNextPage(data.next);
+      setPrevPage(data.previous);
+    });
+
+  }
+
+  
 
   return (
     <>
@@ -67,12 +87,16 @@ function App() {
           <input className='searchbar' type='search' placeholder='Search' value={searchTerm} onChange={handleOnChange} />
         </form>
       </header>
+      <div className='navbar'>
+
+      </div>
       <div className='videogame-container'>
         {videogames.map(videogame => (<Videogame key={videogame.id} {...videogame} />))}
       </div>
-      {/* <form onSubmit={handleButtonPress}> */}
-        <button className='next-button' type='submit' onClick={handleButtonPress} >NEXT</button>
-      {/* </form> */}
+      <div className='button-container'>
+        <button className='previous-button' type='submit' onClick={handlePrevButtonPress} >PREV</button>
+        <button className='next-button' type='submit' onClick={handleNextButtonPress} >NEXT</button>
+      </div>
     </>
   )
 
