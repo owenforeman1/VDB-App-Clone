@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Game } = require('../models');
+const { User, Game, GameList } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -14,44 +14,74 @@ const resolvers = {
         return await Game.find({});
       },
       game: async (parent, { game }) => {
-        return await Game.find({ game });
+        return await Game.findOne({ game });
       },
       gameLists: async (parent, { username }) => {
         const params = username ? { username } : {};
-        return GameList.find(params).sort({ createdAt: -1 })
+        return GameList.find(params).sort({ createdAt: -1 }).populate('games')
       },
       gameList: async (parent, { listId }) => {
-        return Thought.findOne({ _id: listId })
+        return GameList.findOne({ _id: listId }).populate('games')
       },
   },
 
   Mutation: {
     addUser: async (parent, { username, password }) => {
-        const user = await User.create({ username, password });
-        const token = signToken(user);
-        return { token, user };
-      },
+      const user = await User.create({ username, password });
+      const token = signToken(user);
+      return { token, user };
+    },
     login: async (parent, { username, password }) => {
-        const user = await User.findOne({ username });
+      const user = await User.findOne({ username });
   
-        if (!user) {
-          throw new AuthenticationError('No user found with this username');
-        }
+      if (!user) {
+        throw new AuthenticationError('No user found with this username');
+      }
   
-        const correctPw = await user.isCorrectPassword(password);
+      const correctPw = await user.isCorrectPassword(password);
   
-        if (!correctPw) {
-          throw new AuthenticationError('Incorrect credentials');
-        }
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect credentials');
+      }
   
-        const token = signToken(user);
+      const token = signToken(user);
   
-        return { token, user };
-      },
-    addGame: async () => {},
-    addGameList: async () => {},  
-    removeGame: async () => {},
-    removeGameList: async () => {},
+      return { token, user };
+    },
+    addGame: async (parent, { listId, slug, name, released, image }) => {
+      const newGame = await Game.create({ slug, name, released, image})
+
+      return GameList.findOneAndUpdate(
+        { _id: listId },
+        { $addToSet: { games: { _id: newGame._id } } },
+        { new: true }
+        // Future Todo: Add if/else to search for games if they already exist
+      );
+    },
+    addGameList: async (parent, { listName }, context) => {
+      
+      if (context.user) {
+        const list = await GameList.create({ listName })
+        await User.findOneAndUpdate(
+          {_id: context.user._id}
+          { $addToSet: { lists: list._id } }
+        );
+
+        return list;
+      };
+
+      throw new AuthenticationError('You need to be logged in!');
+    },  
+    removeGame: async (parent, { listId, gameId }) => {
+      return GameList.findOneAndUpdate(
+        { _id: listId },
+        { $pull: { games: { _id: gameId } } },
+        { new: true }
+      );
+    },
+    removeGameList: async (parent, { listId }) => {
+      return GameList.findOneAndDelete({ _id: listId });
+    },
   }
 };
 
