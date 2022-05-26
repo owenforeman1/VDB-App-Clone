@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const gameSchema = new Schema({
   slug: {
     type: String,
-    unique: true,
+    // unique: true,
   },
   name: {
     type: String,

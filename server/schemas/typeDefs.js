@@ -33,17 +33,17 @@ const typeDefs = gql`
 
     type Query {
         users: [User]
-        user(username: String!): User
+        user(userId: ID): User
         games: [Game]
-        game(game: String!): Game
-        gameLists(username: String): [GameList]
+        game(gameId: ID): Game
+        gameLists(userId: ID): [GameList]
         gameList(listId: ID!): GameList
     }
 
     type Mutation {
         addUser(username: String!, password: String!): Auth
         login(username: String!, password: String!): Auth
-        addGame(listId: ID!, slug: String!, name: String!, released: String!, image: String!): GameList
+        addGame(listId: ID!, slug: String!, name: String!, released: String!, image: String!, rating: String!, platforms: String!,metacritic: Int!): GameList
         addGameList(listName: String!): GameList
         removeGame(listId: ID!, gameId: ID!): GameList
         removeGameList(listId: ID!): GameList

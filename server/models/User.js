@@ -13,7 +13,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 6,
   },
-  lists: [
+  gameLists: [
     {
       type: Schema.Types.ObjectId,
       ref: "GameList",
@@ -30,7 +30,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.isCorrectPassword = async function (password) {
+userSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
