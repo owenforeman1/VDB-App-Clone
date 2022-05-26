@@ -51,19 +51,20 @@ const resolvers = {
     addGame: async (parent, { listId, slug, name, released, image }) => {
       const newGame = await Game.create({ slug, name, released, image})
 
-      return GameList.findOneAndUpdate(
+      await GameList.findOneAndUpdate(
         { _id: listId },
         { $addToSet: { games: { _id: newGame._id } } },
         { new: true }
         // Future Todo: Add if/else to search for games if they already exist
       );
+      return newGame;
     },
     addGameList: async (parent, { listName }, context) => {
-      
+    console.log(context.user)
       if (context.user) {
         const list = await GameList.create({ listName })
         await User.findOneAndUpdate(
-          {_id: context.user._id}
+          {_id: context.user._id},
           { $addToSet: { lists: list._id } }
         );
 
