@@ -16,6 +16,15 @@ const gameSchema = new Schema({
   image: {
     type: String,
   },
+  rating: {
+    type: String,
+  },
+  platforms: {
+    type: String,
+  },
+  metacritic: {
+    type: Number,
+  }
 });
 
 const Game = model("Game", gameSchema);
