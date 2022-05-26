@@ -1,10 +1,10 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import Videogame from './components/Videogame';
-import Login from './components/Login';
-import { Routes, Route, Router, NavLink, Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faEnvelope, faBook } from '@fortawesome/free-solid-svg-icons';
+// import Login from './components/Login';
+// import { Routes, Route, Router, NavLink, Link } from 'react-router-dom';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faHome, faUser, faEnvelope, faBook } from '@fortawesome/free-solid-svg-icons';
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
