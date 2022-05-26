@@ -26,7 +26,7 @@ export const ADD_USER = gql`
 
 export const ADD_GAME = gql`
   mutation addGame($listId: ID!, $slug: String! $name: String!, $released: String!, $image: String!) {
-    
+
     addGame(listId: $listId, slug: $slug, name: $name, released: $released, image: $image) {
       _id
       listId
