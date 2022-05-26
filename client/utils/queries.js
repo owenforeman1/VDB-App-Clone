@@ -14,22 +14,50 @@ query users {
     users {
       _id
       username
-      password
     }
   }
 `;
 
-export const QUERY_GAME = gql
+export const QUERY_GAMES = gql`
+query Games {
+    games {
+      name
+      _id
+      slug
+    }
+  }
+`
 
+export const QUERY_GAME = gql`
+query Game($gameId: ID) {
+    game(gameId: $gameId) {
+      _id
+      slug
+      name
+      released
+      image
+    }
+  }`
 
-// users: [User]
-//         user(username: String!): User
-//         games: [Game]
-//         game(game: String!): Game
-//         gameLists(username: String): [GameList]
-//         gameList(listId: ID!): GameList
+export const QUERY_GAMELISTS = gql`
+query GameLists($userId: ID) {
+    gameLists(userId: $userId) {
+    _id
+    listName
+    games {
+      name
+    }  
+    }
+  }`
 
-        //    lists {
-    //     _id
-    //     games
-    //   }
+export const QUERY_GAMELIST = gql`
+query GameLists($listId: ID!) {
+    gameList(listId: $listId) {
+    listName
+    games {
+      name
+      slug
+    }  
+    }
+  }`
+
