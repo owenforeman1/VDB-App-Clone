@@ -61,14 +61,3 @@ query GameLists($listId: ID!) {
     }
   }`
 
-// users: [User]
-//         user(username: String!): User
-//         games: [Game]
-//         game(game: String!): Game
-//         gameLists(username: String): [GameList]
-//         gameList(listId: ID!): GameList
-
-        //    lists {
-    //     _id
-    //     games
-    //   }
