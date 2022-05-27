@@ -46,6 +46,11 @@ query GameLists($userId: ID) {
     listName
     games {
       name
+      image
+      released
+      slug
+      rating
+      platforms
     }  
     }
   }`
