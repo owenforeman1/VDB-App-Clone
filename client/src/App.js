@@ -8,8 +8,10 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import ProfileComponent from './components/Profile';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import MyProfile from './components/MyProfile';
 
 
 const httpLink = createHttpLink({
@@ -37,31 +39,20 @@ const client = new ApolloClient({
 function App() {
 
   return (
-  <ApolloProvider client={client}>
-    <Router>
-      <Header />
-      <Routes>
-        <Route 
-          path="/"
-          element={<Home />}
-        />
-        <Route 
-          path="/login"
-          element={<Login />}
-        />
-        <Route 
-          path="/signup"
-          element={<Signup />}
-        />
-        <Route 
-          path="/profiles/:username"
-          element={<Profile />}
-        />
-      </Routes>
-      <Footer/>
-    </Router>
-  </ApolloProvider>
-  )
+    <ApolloProvider client={client}>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/profiles/:username" element={<ProfileComponent />} />
+          <Route path="/me" element={<MyProfile />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </ApolloProvider>
+  );
 };
 
 export default App;

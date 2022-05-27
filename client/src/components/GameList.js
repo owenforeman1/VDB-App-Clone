@@ -1,85 +1,38 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
 import { ADD_GAMELIST } from "../utils/mutations";
+import { QUERY_GAMELIST } from "../utils/queries";
 
-import Auth from "../../utils/auth";
+import auth from "../utils/auth";
 
-const GameList = ({ thoughtId }) => {
-  const [commentText, setCommentText] = useState("");
-  const [characterCount, setCharacterCount] = useState(0);
+const GameList = ({ listData }) => {
+  const userid = auth.loggedIn() && auth.getProfile().data._id;
+  const { listName, _id: listId, games} = listData
 
-  const [addComment, { error }] = useMutation(ADD_GAMELIST);
+  const {
+    loading: listloading,
+    data: gameListObj,
+  } = useQuery(QUERY_GAMELIST, {
+    variables: { userId: userid },
+  });
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
 
-    try {
-      const { data } = await addComment({
-        variables: {
-          thoughtId,
-          commentText,
-          commentAuthor: Auth.getProfile().data.username,
-        },
-      });
 
-      setCommentText("");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name === "commentText" && value.length <= 280) {
-      setCommentText(value);
-      setCharacterCount(value.length);
-    }
-  };
 
   return (
-    <div>
-
-      {Auth.loggedIn() ? (
-        <>
-          <p
-            className={`m-0 ${
-              characterCount === 280 || error ? "text-danger" : ""
-            }`}
-          >
-            Character Count: {characterCount}/280
-            {error && <span className="ml-2">{error.message}</span>}
-          </p>
-          <form
-            className="flex-row justify-center justify-space-between-md align-center"
-            onSubmit={handleFormSubmit}
-          >
-            <div className="col-12 col-lg-9">
-              <textarea
-                name="commentText"
-                placeholder="Add your comment..."
-                value={commentText}
-                className="form-input w-100"
-                style={{ lineHeight: "1.5", resize: "vertical" }}
-                onChange={handleChange}
-              ></textarea>
-            </div>
-
-            <div className="col-12 col-lg-3">
-              <button className="btn btn-primary btn-block py-3" type="submit">
-                Add GameList
-              </button>
-            </div>
-          </form>
-        </>
-      ) : (
-        <p>
-          You need to be logged in to add a gamelist. Please{" "}
-          <Link to="/login">login</Link> or <Link to="/signup">signup.</Link>
-        </p>
-      )}
+    <div style={{border: '1px solid white'}}>
+      <h3>{listName}</h3>
+      <h4>Games:</h4>
+      {games.length ? 
+        games.map((gameItem) => <div style={{padding: '15px', border: '1px solid white'}}>
+        <img src={gameItem.image} width={100} />
+        <h5>{gameItem.name}</h5>
+        <p>{gameItem.platforms}</p>
+        <p>{gameItem.slug}</p>
+        </div>)
+       : <p>This list is empty!</p>}
     </div>
   );
 };

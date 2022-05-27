@@ -25,14 +25,36 @@ export const ADD_USER = gql`
 `;
 
 export const ADD_GAME = gql`
-  mutation addGame($listId: ID!, $slug: String! $name: String!, $released: String!, $image: String!) {
-    addGame(listId: $listId, slug: $slug, name: $name, released: $released, image: $image) {
+  mutation Mutation(
+    $listId: ID!
+    $slug: String!
+    $name: String!
+    $released: String!
+    $image: String!
+    $rating: String!
+    $platforms: String!
+    $metacritic: Int!
+  ) {
+    addGame(
+      listId: $listId
+      slug: $slug
+      name: $name
+      released: $released
+      image: $image
+      rating: $rating
+      platforms: $platforms
+      metacritic: $metacritic
+    ) {
       _id
-      listId
-      slug
-      name
-      released
-      image
+      games {
+        slug
+        name
+        released
+        image
+        rating
+        platforms
+        metacritic
+      }
     }
   }
 `;

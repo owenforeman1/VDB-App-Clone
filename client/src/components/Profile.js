@@ -1,14 +1,14 @@
 import { Navigate, useParams } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { QUERY_USER, QUERY_GAMELIST, QUERY_GAMELISTS, } from '../../utils/queries';
+import { QUERY_USER, QUERY_GAMELIST, QUERY_GAMELISTS, } from '../utils/queries';
 import AuthService from '../utils/auth';
 
 
 
 const Profile = () => {
 
-    const { username: userParam } = useParams();
+    let { username: userParam } = useParams();
 
     const { loading, data } = useQuery(QUERY_USER, {
       variables: { username: userParam },
@@ -20,7 +20,7 @@ const Profile = () => {
         variables: { userId: user._id}
     })
 
-    const gamelists = listdata.GameLists || [];
+    const gamelists = listdata?.GameLists || [];
 
     // navigate to personal profile page if username is yours
     if (AuthService.loggedIn() && AuthService.getProfile().data.username === userParam) {
@@ -30,7 +30,7 @@ const Profile = () => {
     if (loading) {
       return <div>Loading...</div>;
     }
-  
+    console.log(user)
     if (!user?.username) {
       return (
         <h4>
@@ -44,7 +44,7 @@ const Profile = () => {
         return <div>Loading...</div>;
     }
 
-
+    console.log(gamelists);
     return (
 
         <>
